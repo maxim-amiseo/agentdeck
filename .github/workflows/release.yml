@@ -9,35 +9,33 @@ permissions:
   contents: write
 
 jobs:
-  # macOS builds first and creates the (draft) GitHub release for this tag.
-  # Windows waits for it, so electron-builder finds and reuses the same
-  # release instead of both jobs racing to create their own — running them
-  # as a true parallel matrix caused exactly that duplicate-release bug.
-  build-macos:
-    runs-on: macos-latest
+  # electron-builder's GitHub publisher sometimes fails to find the release
+  # a sibling job just created for the same tag (the platform jobs raced,
+  # and even sequencing them didn't fix it once — each ended up creating its
+  # own duplicate release). Pre-creating the release here, before either
+  # platform build starts, means both builds attach to an already-existing,
+  # fully-propagated release instead of each trying to create one.
+  create-release:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Enable pnpm
-        run: corepack enable
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build and publish
+      - name: Create draft release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run release
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --repo "${{ github.repository }}" \
+            --title "${{ github.ref_name }}" \
+            --notes "" \
+            --draft
 
-  build-windows:
-    needs: build-macos
-    runs-on: windows-latest
+  build:
+    needs: create-release
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,7 +57,7 @@ jobs:
         run: pnpm run release
 
   publish-release:
-    needs: [build-macos, build-windows]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Publish the draft release
