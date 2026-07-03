@@ -1,0 +1,8 @@
+allowBuilds:
+  electron: true
+  electron-winstaller: true
+  esbuild: true
+  node-pty: true
+  node-pty-prebuilt-multiarch: true
+  sharp: true
+  '@img/sharp-win32-x64': true

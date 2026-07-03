@@ -1,0 +1,73 @@
+{
+  "name": "agentdeck",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Desktop manager for multiple named Claude Code CLI agents with voice routing",
+  "author": "Maxim",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --build",
+    "dist": "electron-vite build && electron-builder --win",
+    "release": "electron-vite build && electron-builder --publish always"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "electron": "^43.0.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@tailwindcss/vite": "^4.3.2",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "electron-store": "^11.0.2",
+    "electron-updater": "^6.8.9",
+    "node-pty": "^1.1.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "zustand": "^5.0.14"
+  },
+  "build": {
+    "appId": "com.maxim.agentdeck",
+    "productName": "AgentDeck",
+    "npmRebuild": false,
+    "directories": {
+      "output": "release"
+    },
+    "asarUnpack": [
+      "**/node_modules/node-pty/**"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "maxim-amiseo",
+      "repo": "agentdeck"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "resources/icon-1024.png",
+      "category": "public.app-category.developer-tools"
+    }
+  }
+}

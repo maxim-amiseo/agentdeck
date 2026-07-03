@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0b0d10;
+  --color-panel: #121519;
+  --color-panel-hover: #191d22;
+  --color-border: #22262c;
+  --color-accent: #6ea8ff;
+  --color-text: #e6e8eb;
+  --color-text-dim: #8b939e;
+  --color-status-idle: #5b6470;
+  --color-status-running: #4fd17a;
+  --color-status-exited: #e2584a;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family:
+    'Inter Variable',
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Product-register motion: fast, purposeful, never bouncy. Anything that
+   plays once on mount/appear uses these; continuous transitions (hover,
+   width drags) are declared inline where the state lives. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 180ms var(--ease-out-quart) both;
+}
+
+.animate-fade-scale-in {
+  animation: fade-scale-in 180ms var(--ease-out-quart) both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 200ms var(--ease-out-quart) both;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s var(--ease-out-quart) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
