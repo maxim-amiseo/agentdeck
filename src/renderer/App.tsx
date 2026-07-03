@@ -3,6 +3,7 @@ import AgentList from './components/Sidebar/AgentList'
 import TerminalPane from './components/Terminal/TerminalPane'
 import DictationCaptureInput from './components/Dictation/DictationCaptureInput'
 import SettingsPanel from './components/Settings/SettingsPanel'
+import SessionsPanel from './components/Sessions/SessionsPanel'
 import TitleBar from './components/TitleBar/TitleBar'
 import UpdateBanner from './components/Update/UpdateBanner'
 import { useAgentsStore } from './state/agentsStore'
@@ -22,6 +23,7 @@ export default function App() {
   const setActiveAgent = useAgentsStore((s) => s.setActiveAgent)
   const loadSettings = useSettingsStore((s) => s.load)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [sessionsOpen, setSessionsOpen] = useState(false)
 
   const sidebarCollapsed = useUiStore((s) => s.sidebarCollapsed)
   const toggleSidebar = useUiStore((s) => s.toggleSidebar)
@@ -52,6 +54,13 @@ export default function App() {
               ☰
             </button>
             <DictationCaptureInput />
+            <button
+              className="shrink-0 rounded-md p-1.5 text-[var(--color-text-dim)] transition-colors duration-150 hover:bg-[var(--color-panel-hover)] hover:text-[var(--color-text)] active:scale-95"
+              onClick={() => setSessionsOpen(true)}
+              title="Sessions"
+            >
+              🕘
+            </button>
             <button
               className={`shrink-0 rounded-md p-1.5 transition-colors duration-150 active:scale-95 ${
                 viewMode === 'grid'
@@ -131,6 +140,7 @@ export default function App() {
 
       <UpdateBanner />
 
+      <SessionsPanel open={sessionsOpen} onClose={() => setSessionsOpen(false)} />
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   )

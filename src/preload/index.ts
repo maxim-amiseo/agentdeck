@@ -5,7 +5,8 @@ import type {
   NewAgentInput,
   PtyDataPayload,
   PtyExitPayload,
-  Settings
+  Settings,
+  SessionSummary
 } from '../shared/types'
 
 const api = {
@@ -97,7 +98,11 @@ const api = {
     const listener = (_e: Electron.IpcRendererEvent, message: string): void => cb(message)
     ipcRenderer.on(IPC.UPDATE_ERROR, listener)
     return () => ipcRenderer.removeListener(IPC.UPDATE_ERROR, listener)
-  }
+  },
+
+  listSessions: (): Promise<SessionSummary[]> => ipcRenderer.invoke(IPC.SESSIONS_LIST),
+  toggleSessionPin: (sessionId: string): Promise<string[]> =>
+    ipcRenderer.invoke(IPC.SESSIONS_TOGGLE_PIN, sessionId)
 }
 
 contextBridge.exposeInMainWorld('api', api)

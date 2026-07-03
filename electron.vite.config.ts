@@ -9,7 +9,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         input: resolve(__dirname, 'src/main/index.ts'),
-        external: ['electron', 'node-pty', 'electron-store'],
+        external: ['electron', 'node-pty', 'electron-store', 'electron-updater'],
         output: {
           format: 'cjs',
           entryFileNames: '[name].js'

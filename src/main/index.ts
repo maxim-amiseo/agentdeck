@@ -7,6 +7,7 @@ import { registerSettingsIpc } from './ipc/settingsIpc'
 import { registerWindowIpc } from './ipc/windowIpc'
 import { registerDialogIpc } from './ipc/dialogIpc'
 import { registerClipboardIpc } from './ipc/clipboardIpc'
+import { registerSessionsIpc } from './ipc/sessionsIpc'
 import { initUpdater } from './updater'
 
 app.whenReady().then(() => {
@@ -14,6 +15,7 @@ app.whenReady().then(() => {
   registerPtyIpc()
   registerSettingsIpc()
   registerClipboardIpc()
+  registerSessionsIpc()
 
   const window = createMainWindow()
   agentManager.attachWindow(window)

@@ -16,6 +16,8 @@ import type { Agent, Settings } from '../../shared/types'
 export function buildClaudeArgs(agent: Agent, settings: Settings): string[] {
   const args = ['--model', 'claude-sonnet-5', '--dangerously-skip-permissions']
 
+  if (agent.resumeSessionId) args.push('--resume', agent.resumeSessionId)
+
   if (settings.claudeExtraArgs.trim().length > 0) {
     args.push(...settings.claudeExtraArgs.trim().split(/\s+/))
   }

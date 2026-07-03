@@ -8,12 +8,23 @@ export interface Agent {
   status: AgentStatus
   order: number
   createdAt: number
+  resumeSessionId?: string
 }
 
 export interface NewAgentInput {
   name: string
   aliases?: string[]
   cwd?: string
+  resumeSessionId?: string
+}
+
+export interface SessionSummary {
+  id: string
+  cwd: string
+  projectLabel: string
+  preview: string
+  updatedAt: number
+  pinned: boolean
 }
 
 export interface Settings {

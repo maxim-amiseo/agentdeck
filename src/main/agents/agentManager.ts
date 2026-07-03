@@ -72,7 +72,8 @@ class AgentManager {
       cwd: input.cwd || this.settings.defaultCwd,
       status: 'idle',
       order: this.agents.size,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      resumeSessionId: input.resumeSessionId
     }
     this.agents.set(agent.id, agent)
     this.persistAgents()

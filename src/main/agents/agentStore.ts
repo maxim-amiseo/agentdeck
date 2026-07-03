@@ -4,12 +4,14 @@ import { DEFAULT_SETTINGS, type Agent, type Settings } from '../../shared/types'
 interface StoreShape {
   agents: Agent[]
   settings: Settings
+  pinnedSessionIds: string[]
 }
 
 const store = new Store<StoreShape>({
   defaults: {
     agents: [],
-    settings: DEFAULT_SETTINGS
+    settings: DEFAULT_SETTINGS,
+    pinnedSessionIds: []
   }
 })
 
@@ -27,4 +29,17 @@ export function loadSettings(): Settings {
 
 export function saveSettings(settings: Settings): void {
   store.set('settings', settings)
+}
+
+export function loadPinnedSessionIds(): string[] {
+  return store.get('pinnedSessionIds') ?? []
+}
+
+export function toggledPinnedSessionId(sessionId: string): string[] {
+  const current = new Set(loadPinnedSessionIds())
+  if (current.has(sessionId)) current.delete(sessionId)
+  else current.add(sessionId)
+  const next = Array.from(current)
+  store.set('pinnedSessionIds', next)
+  return next
 }

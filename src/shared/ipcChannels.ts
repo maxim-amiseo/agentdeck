@@ -34,5 +34,8 @@ export const IPC = {
   UPDATE_AVAILABLE: 'update:available',
   UPDATE_NOT_AVAILABLE: 'update:not-available',
   UPDATE_DOWNLOADED: 'update:downloaded',
-  UPDATE_ERROR: 'update:error'
+  UPDATE_ERROR: 'update:error',
+
+  SESSIONS_LIST: 'sessions:list',
+  SESSIONS_TOGGLE_PIN: 'sessions:toggle-pin'
 } as const
