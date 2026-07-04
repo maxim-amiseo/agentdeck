@@ -1,6 +1,6 @@
 {
   "name": "agentdeck",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Desktop manager for multiple named Claude Code CLI agents with voice routing",
   "author": "Maxim",
