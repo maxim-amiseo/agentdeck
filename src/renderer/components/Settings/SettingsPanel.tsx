@@ -24,14 +24,24 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const [mounted, setMounted] = useState(false)
   const [checking, setChecking] = useState(false)
   const [checkedJustNow, setCheckedJustNow] = useState(false)
+  const [checkError, setCheckError] = useState<string | null>(null)
 
   useEffect(() => {
-    const unsub = window.api.onUpdateNotAvailable(() => {
+    const unsubNotAvailable = window.api.onUpdateNotAvailable(() => {
       setChecking(false)
+      setCheckError(null)
       setCheckedJustNow(true)
       setTimeout(() => setCheckedJustNow(false), 4000)
     })
-    return unsub
+    const unsubError = window.api.onUpdateError((message) => {
+      setChecking(false)
+      setCheckError(message)
+      setTimeout(() => setCheckError(null), 5000)
+    })
+    return () => {
+      unsubNotAvailable()
+      unsubError()
+    }
   }, [])
 
   useEffect(() => {
@@ -163,12 +173,14 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               className="rounded-md border border-[var(--color-border)] px-2 py-1 text-xs text-[var(--color-text-dim)] transition-colors duration-150 hover:text-[var(--color-text)] disabled:opacity-40"
               onClick={() => {
                 setChecking(true)
+                setCheckError(null)
                 window.api.checkForUpdates()
               }}
             >
               {checking ? 'Recherche…' : 'Vérifier les mises à jour'}
             </button>
           </div>
+          {checkError && <p className="mt-1.5 text-xs text-[var(--color-status-exited)]">{checkError}</p>}
         </section>
       </div>
     </div>

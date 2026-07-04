@@ -19,6 +19,9 @@ interface UiState {
 
   viewMode: ViewMode
   toggleViewMode: () => void
+
+  historyCollapsed: boolean
+  toggleHistory: () => void
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -29,5 +32,8 @@ export const useUiStore = create<UiState>((set) => ({
   setSidebarWidth: (width) => set({ sidebarWidth: clampSidebarWidth(width) }),
 
   viewMode: 'focus',
-  toggleViewMode: () => set((s) => ({ viewMode: s.viewMode === 'focus' ? 'grid' : 'focus' }))
+  toggleViewMode: () => set((s) => ({ viewMode: s.viewMode === 'focus' ? 'grid' : 'focus' })),
+
+  historyCollapsed: false,
+  toggleHistory: () => set((s) => ({ historyCollapsed: !s.historyCollapsed }))
 }))

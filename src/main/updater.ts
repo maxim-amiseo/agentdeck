@@ -8,7 +8,7 @@ import { IPC } from '../shared/ipcChannels'
  * a packaged, installed build.
  */
 export function initUpdater(window: BrowserWindow): void {
-  ipcMain.handle(IPC.UPDATE_CHECK, () => checkForUpdates())
+  ipcMain.handle(IPC.UPDATE_CHECK, () => checkForUpdates(window))
   ipcMain.on(IPC.UPDATE_INSTALL, () => autoUpdater.quitAndInstall())
 
   if (!app.isPackaged) return
@@ -29,12 +29,15 @@ export function initUpdater(window: BrowserWindow): void {
     window.webContents.send(IPC.UPDATE_ERROR, err.message)
   })
 
-  checkForUpdates()
+  checkForUpdates(window)
 }
 
-function checkForUpdates(): void {
-  if (!app.isPackaged) return
-  autoUpdater.checkForUpdates().catch(() => {
-    // Silent: no network, no releases yet, etc. — not worth surfacing as an error.
+function checkForUpdates(window: BrowserWindow): void {
+  if (!app.isPackaged) {
+    window.webContents.send(IPC.UPDATE_ERROR, 'Indisponible en mode développement')
+    return
+  }
+  autoUpdater.checkForUpdates().catch((err: Error) => {
+    window.webContents.send(IPC.UPDATE_ERROR, err.message)
   })
 }

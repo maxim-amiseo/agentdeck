@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAgentsStore } from '../../state/agentsStore'
 import { useRoutingFlash } from '../Dictation/routingFlashStore'
 import { useUiStore } from '../../state/uiStore'
 import AgentListItem from './AgentListItem'
 import NewAgentButton from './NewAgentButton'
+import HistoryList from './HistoryList'
 
 export default function AgentList() {
   const agents = useAgentsStore((s) => s.agents)
@@ -50,23 +51,33 @@ export default function AgentList() {
         transition: isDragging ? 'none' : 'width 220ms var(--ease-out-quart)'
       }}
     >
-      <div className="flex h-full min-w-0 flex-1 flex-col gap-2 overflow-hidden p-2 pt-2.5">
-        <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
-          {agents.map((agent) => (
-            <AgentListItem
-              key={agent.id}
-              agent={agent}
-              isActive={agent.id === activeAgentId}
-              flash={agent.id === flashedAgentId}
-            />
-          ))}
-          {agents.length === 0 && (
-            <p className="px-1 py-4 text-center text-xs text-[var(--color-text-dim)]">
-              Aucun agent, crée-en un pour commencer.
-            </p>
-          )}
+      <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden p-2 pt-2.5">
+        <div className="flex max-h-[45%] shrink-0 flex-col gap-1">
+          <span className="px-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-dim)]">
+            Agents
+          </span>
+          <div className="scroll-thin min-h-0 space-y-1 overflow-y-auto">
+            {agents.map((agent) => (
+              <AgentListItem
+                key={agent.id}
+                agent={agent}
+                isActive={agent.id === activeAgentId}
+                flash={agent.id === flashedAgentId}
+              />
+            ))}
+            {agents.length === 0 && (
+              <p className="px-1 py-3 text-center text-xs text-[var(--color-text-dim)]">
+                Aucun agent, crée-en un pour commencer.
+              </p>
+            )}
+          </div>
         </div>
-        <NewAgentButton />
+
+        <div className="my-2 shrink-0">
+          <NewAgentButton />
+        </div>
+
+        <HistoryList />
       </div>
 
       {!collapsed && (
