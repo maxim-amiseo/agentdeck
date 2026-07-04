@@ -19,6 +19,12 @@ class AgentManager {
     this.window = window
   }
 
+  private send(channel: string, payload: unknown): void {
+    if (this.window && !this.window.isDestroyed()) {
+      this.window.webContents.send(channel, payload)
+    }
+  }
+
   /** Recreates a PTY for every agent saved from a previous session. */
   bootstrap(): void {
     for (const agent of loadAgents()) {
@@ -37,12 +43,12 @@ class AgentManager {
     this.updateStatus(agent.id, 'running')
 
     proc.onData((chunk) => {
-      this.window?.webContents.send(IPC.PTY_DATA, { agentId: agent.id, chunk })
+      this.send(IPC.PTY_DATA, { agentId: agent.id, chunk })
     })
 
     proc.onExit((exitCode) => {
       this.updateStatus(agent.id, 'exited')
-      this.window?.webContents.send(IPC.PTY_EXIT, { agentId: agent.id, exitCode })
+      this.send(IPC.PTY_EXIT, { agentId: agent.id, exitCode })
     })
   }
 
@@ -50,7 +56,7 @@ class AgentManager {
     const agent = this.agents.get(agentId)
     if (!agent) return
     agent.status = status
-    this.window?.webContents.send(IPC.AGENT_STATUS_CHANGED, agent)
+    this.send(IPC.AGENT_STATUS_CHANGED, agent)
   }
 
   listAgents(): Agent[] {

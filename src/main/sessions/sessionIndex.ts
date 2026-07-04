@@ -11,7 +11,7 @@ import { loadPinnedSessionIds } from '../agents/agentStore'
  * the user will never scroll to). Pinned sessions are always included on
  * top of this window, regardless of age. */
 const RECENT_WINDOW = 40
-const PREVIEW_LINE_CAP = 60
+const PREVIEW_LINE_CAP = 400
 const RAW_TEXT_MAX_CHARS = 400
 const TITLE_MAX_CHARS = 60
 

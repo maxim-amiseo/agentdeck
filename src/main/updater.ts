@@ -7,6 +7,10 @@ import { IPC } from '../shared/ipcChannels'
  * build.publish). No-ops entirely in dev — auto-updates only make sense for
  * a packaged, installed build.
  */
+function send(window: BrowserWindow, channel: string, payload?: unknown): void {
+  if (!window.isDestroyed()) window.webContents.send(channel, payload)
+}
+
 export function initUpdater(window: BrowserWindow): void {
   ipcMain.handle(IPC.UPDATE_CHECK, () => checkForUpdates(window))
   ipcMain.on(IPC.UPDATE_INSTALL, () => autoUpdater.quitAndInstall())
@@ -17,16 +21,16 @@ export function initUpdater(window: BrowserWindow): void {
   autoUpdater.autoInstallOnAppQuit = true
 
   autoUpdater.on('update-available', (info) => {
-    window.webContents.send(IPC.UPDATE_AVAILABLE, info.version)
+    send(window, IPC.UPDATE_AVAILABLE, info.version)
   })
   autoUpdater.on('update-not-available', () => {
-    window.webContents.send(IPC.UPDATE_NOT_AVAILABLE)
+    send(window, IPC.UPDATE_NOT_AVAILABLE)
   })
   autoUpdater.on('update-downloaded', (info) => {
-    window.webContents.send(IPC.UPDATE_DOWNLOADED, info.version)
+    send(window, IPC.UPDATE_DOWNLOADED, info.version)
   })
   autoUpdater.on('error', (err) => {
-    window.webContents.send(IPC.UPDATE_ERROR, err.message)
+    send(window, IPC.UPDATE_ERROR, err.message)
   })
 
   checkForUpdates(window)
@@ -34,10 +38,10 @@ export function initUpdater(window: BrowserWindow): void {
 
 function checkForUpdates(window: BrowserWindow): void {
   if (!app.isPackaged) {
-    window.webContents.send(IPC.UPDATE_ERROR, 'Indisponible en mode développement')
+    send(window, IPC.UPDATE_ERROR, 'Indisponible en mode développement')
     return
   }
   autoUpdater.checkForUpdates().catch((err: Error) => {
-    window.webContents.send(IPC.UPDATE_ERROR, err.message)
+    send(window, IPC.UPDATE_ERROR, err.message)
   })
 }
