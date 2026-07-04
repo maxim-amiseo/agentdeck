@@ -150,14 +150,14 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
         <section>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-dim)]">
-            Alias par agent (pour la reconnaissance vocale)
+            Alias vocal (pour la reconnaissance vocale)
           </h3>
           <div className="space-y-1">
             {agents.map((agent) => (
               <AliasEditor key={agent.id} agent={agent} />
             ))}
             {agents.length === 0 && (
-              <p className="text-xs text-[var(--color-text-dim)]">Aucun agent pour l'instant.</p>
+              <p className="text-xs text-[var(--color-text-dim)]">Aucune session ouverte pour l'instant.</p>
             )}
           </div>
         </section>

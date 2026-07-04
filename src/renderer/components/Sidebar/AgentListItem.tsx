@@ -117,7 +117,7 @@ export default function AgentListItem({ agent, isActive, flash }: AgentListItemP
             onClick={(e) => {
               e.stopPropagation()
               setMenuOpen(false)
-              if (confirm(`Supprimer l'agent "${agent.name}" ?`)) deleteAgent(agent.id)
+              if (confirm(`Supprimer la session "${agent.name}" ?`)) deleteAgent(agent.id)
             }}
           >
             Supprimer

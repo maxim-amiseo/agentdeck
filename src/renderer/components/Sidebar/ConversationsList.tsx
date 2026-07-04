@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAgentsStore } from '../../state/agentsStore'
 import { useSessionsStore } from '../../state/sessionsStore'
 import { useRoutingFlash } from '../Dictation/routingFlashStore'
-import { uniqueName } from '../../lib/relativeTime'
+import { randomFrenchName } from '../../lib/frenchNames'
 import AgentListItem from './AgentListItem'
 import HistoryRow from './HistoryRow'
 import type { Agent, SessionSummary } from '../../../shared/types'
@@ -35,6 +35,8 @@ export default function ConversationsList() {
   const load = useSessionsStore((s) => s.load)
   const togglePin = useSessionsStore((s) => s.togglePin)
 
+  const [busyId, setBusyId] = useState<string | null>(null)
+
   useEffect(() => {
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,9 +64,14 @@ export default function ConversationsList() {
   const recent = all.filter((e) => !e.pinned).sort((a, b) => b.timestamp - a.timestamp)
 
   const resumeSession = async (session: SessionSummary): Promise<void> => {
-    const taken = new Set(agents.map((a) => a.name.toLowerCase()))
-    const name = uniqueName(session.projectLabel, taken)
-    await createAgent({ name, cwd: session.cwd, resumeSessionId: session.id })
+    setBusyId(session.id)
+    try {
+      const taken = new Set(agents.map((a) => a.name.toLowerCase()))
+      const name = randomFrenchName(taken)
+      await createAgent({ name, cwd: session.cwd, resumeSessionId: session.id })
+    } finally {
+      setBusyId(null)
+    }
   }
 
   const renderEntry = (entry: Entry): React.JSX.Element =>
@@ -79,7 +86,7 @@ export default function ConversationsList() {
       <HistoryRow
         key={entry.session.id}
         session={entry.session}
-        busy={false}
+        busy={busyId === entry.session.id}
         onOpen={() => resumeSession(entry.session)}
         onTogglePin={() => togglePin(entry.session.id)}
       />
@@ -105,7 +112,7 @@ export default function ConversationsList() {
         <div className="space-y-0.5">{recent.map(renderEntry)}</div>
         {isEmpty && (
           <p className="px-1 py-3 text-center text-xs text-[var(--color-text-dim)]">
-            Aucune conversation. Crée un agent pour commencer.
+            Aucune session. Clique sur "+ Nouvelle session" pour commencer.
           </p>
         )}
       </div>

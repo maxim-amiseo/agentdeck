@@ -9,13 +9,3 @@ export function relativeTime(ms: number): string {
   if (diffJ < 7) return `il y a ${diffJ} j`
   return new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
-
-export function uniqueName(base: string, taken: Set<string>): string {
-  let name = base
-  let n = 2
-  while (taken.has(name.toLowerCase())) {
-    name = `${base} ${n}`
-    n++
-  }
-  return name
-}

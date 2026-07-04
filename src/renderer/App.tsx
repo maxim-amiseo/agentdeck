@@ -60,7 +60,7 @@ export default function App() {
                   : 'text-[var(--color-text-dim)] hover:bg-[var(--color-panel-hover)] hover:text-[var(--color-text)]'
               }`}
               onClick={toggleViewMode}
-              title={viewMode === 'grid' ? 'Vue focus (un agent)' : 'Vue grille (tous les agents)'}
+              title={viewMode === 'grid' ? 'Vue focus (une session)' : 'Vue grille (toutes les sessions)'}
             >
               <GridIcon />
             </button>
@@ -93,7 +93,7 @@ export default function App() {
                       setActiveAgent(agent.id)
                       toggleViewMode()
                     }}
-                    title="Agrandir cet agent"
+                    title="Agrandir cette session"
                   >
                     <span
                       className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_COLOR[agent.status]} ${
@@ -109,8 +109,8 @@ export default function App() {
               ))}
               {agents.length === 0 && (
                 <div className="flex h-full flex-col items-center justify-center gap-2 text-[var(--color-text-dim)]">
-                  <p className="text-sm">Aucun agent ouvert</p>
-                  <p className="text-xs">Crée un agent nommé dans la barre latérale pour démarrer une session.</p>
+                  <p className="text-sm">Aucune session ouverte</p>
+                  <p className="text-xs">Ouvre une session depuis la barre latérale pour commencer.</p>
                 </div>
               )}
             </div>
@@ -121,8 +121,8 @@ export default function App() {
               ))}
               {agents.length === 0 && (
                 <div className="flex h-full flex-col items-center justify-center gap-2 text-[var(--color-text-dim)]">
-                  <p className="text-sm">Aucun agent ouvert</p>
-                  <p className="text-xs">Crée un agent nommé dans la barre latérale pour démarrer une session.</p>
+                  <p className="text-sm">Aucune session ouverte</p>
+                  <p className="text-xs">Ouvre une session depuis la barre latérale pour commencer.</p>
                 </div>
               )}
             </div>
