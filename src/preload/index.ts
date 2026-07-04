@@ -6,7 +6,8 @@ import type {
   PtyDataPayload,
   PtyExitPayload,
   Settings,
-  SessionSummary
+  SessionSummary,
+  SessionStats
 } from '../shared/types'
 
 const api = {
@@ -102,7 +103,8 @@ const api = {
 
   listSessions: (): Promise<SessionSummary[]> => ipcRenderer.invoke(IPC.SESSIONS_LIST),
   toggleSessionPin: (sessionId: string): Promise<string[]> =>
-    ipcRenderer.invoke(IPC.SESSIONS_TOGGLE_PIN, sessionId)
+    ipcRenderer.invoke(IPC.SESSIONS_TOGGLE_PIN, sessionId),
+  getSessionStats: (): Promise<SessionStats> => ipcRenderer.invoke(IPC.SESSIONS_STATS)
 }
 
 contextBridge.exposeInMainWorld('api', api)

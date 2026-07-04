@@ -27,6 +27,13 @@ export interface SessionSummary {
   pinned: boolean
 }
 
+export interface SessionStats {
+  totalSessions: number
+  sessionsThisWeek: number
+  streakDays: number
+  totalSizeMB: number
+}
+
 export interface Settings {
   dictationRoutingEnabled: boolean
   debounceMs: number

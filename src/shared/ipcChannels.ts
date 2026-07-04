@@ -37,5 +37,6 @@ export const IPC = {
   UPDATE_ERROR: 'update:error',
 
   SESSIONS_LIST: 'sessions:list',
-  SESSIONS_TOGGLE_PIN: 'sessions:toggle-pin'
+  SESSIONS_TOGGLE_PIN: 'sessions:toggle-pin',
+  SESSIONS_STATS: 'sessions:stats'
 } as const

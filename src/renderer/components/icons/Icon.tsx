@@ -50,6 +50,19 @@ export function StarIcon({ className, filled = false }: IconProps & { filled?: b
   )
 }
 
+export function HomeIcon({ className }: IconProps) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={className}>
+      <path
+        d="M2 7.2 8 2l6 5.2V13.5a.5.5 0 0 1-.5.5H10v-4H6v4H2.5a.5.5 0 0 1-.5-.5V7.2z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export function PlusIcon({ className }: IconProps) {
   return (
     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className={className}>

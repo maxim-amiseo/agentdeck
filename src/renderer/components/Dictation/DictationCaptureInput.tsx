@@ -53,6 +53,9 @@ export default function DictationCaptureInput() {
 
   const flash = useRoutingFlash((s) => s.flash)
 
+  const [routedName, setRoutedName] = useState<string | null>(null)
+  const routedTimerRef = useRef<number | null>(null)
+
   const flush = (): void => {
     if (debounceRef.current) {
       window.clearTimeout(debounceRef.current)
@@ -71,7 +74,15 @@ export default function DictationCaptureInput() {
     if (!result) return
 
     if (result.targetAgentId !== activeAgentIdRef.current) setActiveAgent(result.targetAgentId)
-    if (result.matchedBy !== 'fallback') flash(result.targetAgentId)
+    if (result.matchedBy !== 'fallback') {
+      flash(result.targetAgentId)
+      const target = agentsRef.current.find((a) => a.id === result.targetAgentId)
+      if (target) {
+        if (routedTimerRef.current) window.clearTimeout(routedTimerRef.current)
+        setRoutedName(target.name)
+        routedTimerRef.current = window.setTimeout(() => setRoutedName(null), 1600)
+      }
+    }
     if (result.promptText) window.api.submitPrompt(result.targetAgentId, result.promptText)
   }
 
@@ -153,7 +164,9 @@ export default function DictationCaptureInput() {
   return (
     <div
       data-chrome-surface="true"
-      className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-[var(--color-bg)] px-3 py-1.5 ring-1 ring-transparent transition-shadow duration-150 focus-within:ring-[var(--color-accent)]"
+      className={`flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-[var(--color-bg)] px-3 py-1.5 ring-1 transition-[box-shadow,background-color] duration-150 focus-within:ring-[var(--color-accent)] ${
+        routedName ? 'bg-[var(--color-accent)]/10 ring-[var(--color-accent)]' : 'ring-transparent'
+      }`}
     >
       <span
         className={`h-1.5 w-1.5 rounded-full transition-colors duration-200 ${
@@ -162,12 +175,18 @@ export default function DictationCaptureInput() {
             : 'bg-[var(--color-status-idle)]'
         }`}
       />
-      <span className="shrink-0 text-xs text-[var(--color-text-dim)] transition-opacity duration-150">
-        {MODE_LABEL[mode]}
-        {activeAgentId &&
-          agents.find((a) => a.id === activeAgentId) &&
-          ` → ${agents.find((a) => a.id === activeAgentId)?.name}`}
-      </span>
+      {routedName ? (
+        <span className="animate-fade-scale-in shrink-0 text-xs font-medium text-[var(--color-accent)]">
+          → {routedName} ✓
+        </span>
+      ) : (
+        <span className="shrink-0 text-xs text-[var(--color-text-dim)] transition-opacity duration-150">
+          {MODE_LABEL[mode]}
+          {activeAgentId &&
+            agents.find((a) => a.id === activeAgentId) &&
+            ` → ${agents.find((a) => a.id === activeAgentId)?.name}`}
+        </span>
+      )}
       <input
         ref={inputRef}
         value={value}
