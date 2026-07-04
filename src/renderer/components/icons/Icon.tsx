@@ -36,24 +36,6 @@ export function SettingsIcon({ className }: IconProps) {
   )
 }
 
-export function ChevronIcon({ className, direction = 'down' }: IconProps & { direction?: 'down' | 'right' }) {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      fill="none"
-      className={className}
-      style={{
-        transform: direction === 'right' ? 'rotate(-90deg)' : 'none',
-        transition: 'transform 150ms var(--ease-out-quart)'
-      }}
-    >
-      <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 export function StarIcon({ className, filled = false }: IconProps & { filled?: boolean }) {
   return (
     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className={className}>

@@ -5,12 +5,11 @@ import { relativeTime } from '../../lib/relativeTime'
 interface HistoryRowProps {
   session: SessionSummary
   busy: boolean
-  isOpenAsAgent: boolean
   onOpen: () => void
   onTogglePin: () => void
 }
 
-export default function HistoryRow({ session, busy, isOpenAsAgent, onOpen, onTogglePin }: HistoryRowProps) {
+export default function HistoryRow({ session, busy, onOpen, onTogglePin }: HistoryRowProps) {
   return (
     <div
       className="group flex cursor-pointer items-start gap-2 rounded-lg px-2 py-1.5 transition-colors duration-150 hover:bg-[var(--color-panel-hover)]/60"
@@ -31,16 +30,12 @@ export default function HistoryRow({ session, busy, isOpenAsAgent, onOpen, onTog
         <StarIcon filled={session.pinned} />
       </button>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
-          {isOpenAsAgent && (
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-status-running)]" title="Déjà ouvert" />
-          )}
-          <span className="truncate text-xs font-medium text-[var(--color-text)]">{session.projectLabel}</span>
-          <span className="ml-auto shrink-0 text-[10px] text-[var(--color-text-dim)]">
-            {busy ? 'Ouverture…' : relativeTime(session.updatedAt)}
-          </span>
+        <p className="line-clamp-2 min-w-0 flex-1 text-xs leading-snug text-[var(--color-text)]">
+          {session.preview}
+        </p>
+        <div className="mt-0.5 text-[10px] text-[var(--color-text-dim)]">
+          {busy ? 'Ouverture…' : relativeTime(session.updatedAt)}
         </div>
-        <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-[var(--color-text-dim)]">{session.preview}</p>
       </div>
     </div>
   )
